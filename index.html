@@ -1,0 +1,496 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UB Shop - Envío Gratis a todo México en Compra mínima de $990</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- FontAwesome Íconos -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-black text-white min-h-screen bg-cover bg-center bg-no-repeat bg-fixed" style="background-image: url('fondo.jpg');">
+
+  <div class="min-h-screen bg-black/85 backdrop-blur-xs">
+    
+    <!-- HEADER -->
+    <header class="py-6 border-b border-neutral-800/80 text-center bg-black/60">
+      <div class="flex justify-center items-center mb-2">
+        <img src="logo.jpg" alt="UB Shop" class="h-28 md:h-36 object-contain hover:scale-105 transition-transform duration-300" onerror="this.src='logo.jpeg'">
+      </div>
+      <p class="text-[10px] md:text-xs tracking-[0.2em] text-amber-200/60 font-semibold">
+        Envío Gratis a todo México en Compra mínima de $990
+      </p>
+    </header> 
+
+    <!-- BARRA DE BÚSQUEDA -->
+    <div class="max-w-2xl mx-auto px-4 pb-5 pt-4">
+      <div class="relative">
+        <input type="text" id="searchInput" onkeyup="filterProducts()" placeholder="Buscar en el catálogo exclusivo..." class="w-full pl-11 pr-4 py-2.5 bg-neutral-950/90 border border-amber-500/30 rounded-full text-sm text-amber-100 placeholder-neutral-500 focus:outline-none focus:border-amber-400">
+        <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-amber-500/70"></i>
+      </div>
+    </div>
+
+    <!-- SECCIÓN DE PRODUCTOS -->
+    <main class="max-w-6xl mx-auto px-4 py-10">
+      <div id="productGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 md:gap-7">
+        <p class="text-amber-400 text-center col-span-full py-10 font-medium">Cargando catálogo...</p>
+      </div>
+    </main>
+
+  </div>
+  <!-- MODAL DE DETALLE DE PRODUCTO -->
+<div id="productModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden justify-center items-center z-50 p-4">
+  <div class="bg-neutral-900 border border-amber-500/30 rounded-2xl max-w-lg w-full p-6 relative flex flex-col items-center shadow-2xl">
+    <!-- Botón para cerrar -->
+    <button onclick="closeModal()" class="absolute top-3 right-4 text-neutral-400 hover:text-white text-2xl font-bold">&times;</button>
+    
+    <!-- Imagen ampliada -->
+    <!-- Carrusel de imágenes -->
+<div class="relative w-full mb-4 group">
+    <img id="modalImg" src="" alt="Producto" class="w-full max-h-72 object-contain rounded-lg border border-neutral-800">
+    
+    <!-- Botón Anterior -->
+    <button id="prevImgBtn" onclick="changeImage(-1)" class="absolute left-2 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black text-amber-400 p-2 rounded-full transition-all hidden">
+        &#10094;
+    </button>
+    
+    <!-- Botón Siguiente -->
+    <button id="nextImgBtn" onclick="changeImage(1)" class="absolute right-2 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black text-amber-400 p-2 rounded-full transition-all hidden">
+        &#10095;
+    </button>
+</div>
+    
+    <!-- Contenido -->
+    <h3 id="modalTitle" class="text-xl font-bold text-white mb-1 text-center"></h3>
+    <p id="modalCategory" class="text-amber-200/70 text-xs font-medium uppercase tracking-wider mb-3 text-center"></p>
+    <p id="modalDescription" class="text-neutral-300 text-sm mb-4 text-left whitespace-pre-line leading-relaxed px-2"></p>
+    
+    <div class="flex justify-between items-center w-full pt-3 border-t border-neutral-800">
+        <span id="modalPrice" class="text-emerald-400 font-bold text-xl"></span>
+        <div class="flex gap-2">
+          <button id="modalAddCartBtn" class="bg-neutral-800 hover:bg-neutral-700 text-amber-400 font-semibold px-3 py-2 rounded-lg text-xs transition-colors flex items-center gap-1 border border-amber-500/30">
+            <i class="fa-solid fa-cart-plus"></i> Agregar
+          </button>
+          <a id="modalWaLink" href="#" target="_blank" class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-4 py-2 rounded-lg text-xs transition-colors flex items-center gap-2">
+            <i class="fa-brands fa-whatsapp text-sm"></i> Pedir
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- BOTÓN FLOTANTE DEL CARRITO -->
+  <button onclick="toggleCartDrawer()" class="fixed bottom-6 right-6 bg-amber-500 hover:bg-amber-400 text-black p-4 rounded-full shadow-2xl z-40 flex items-center justify-center transition-transform hover:scale-110">
+    <i class="fa-solid fa-cart-shopping text-xl"></i>
+    <span id="cartCount" class="absolute -top-1 -right-1 bg-red-600 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-black">0</span>
+  </button>
+
+  <!-- DRAWER / PANEL LATERAL DEL CARRITO -->
+  <div id="cartDrawer" class="fixed inset-y-0 right-0 max-w-xs md:max-w-sm w-full bg-neutral-900 border-l border-amber-500/30 shadow-2xl z-50 transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
+    <!-- Header del Carrito -->
+    <div class="p-4 border-b border-neutral-800 flex justify-between items-center bg-black/50">
+      <h2 class="text-lg font-bold text-amber-400 flex items-center gap-2">
+        <i class="fa-solid fa-bag-shopping"></i> Tu Carrito
+      </h2>
+      <button onclick="toggleCartDrawer()" class="text-neutral-400 hover:text-white text-xl">&times;</button>
+    </div>
+
+      <!-- BARRA ENVÍO GRATIS -->
+      <div id="shippingProgressContainer" class="p-3 bg-neutral-950 border-b border-neutral-800 text-xs">
+        <p id="shippingProgressText" class="text-center font-medium mb-1 text-amber-200/90"></p>
+        <div class="w-full bg-neutral-800 rounded-full h-2 overflow-hidden">
+          <div id="shippingProgressBar" class="bg-amber-400 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+        </div>
+      </div>
+
+    <!-- Lista de Productos en el Carrito -->
+    <div id="cartItemsContainer" class="flex-1 overflow-y-auto p-4 space-y-4">
+      <!-- Se genera dinámicamente -->
+    </div>
+
+    <!-- Footer del Carrito -->
+    <div class="p-4 border-t border-neutral-800 bg-black/50 space-y-3">
+      <div class="flex justify-between items-center text-sm">
+        <span class="text-neutral-400">Total:</span>
+        <span id="cartTotal" class="text-emerald-400 font-bold text-lg">$0</span>
+      </div>
+      <button onclick="sendCartToWhatsApp()" class="w-full bg-amber-500 hover:bg-amber-600 text-black font-bold py-3 rounded-xl transition-colors flex items-center justify-center gap-2">
+        <i class="fa-brands fa-whatsapp text-lg"></i> Confirmar Pedido por WhatsApp
+      </button>
+    </div>
+  </div>
+
+ <script>
+    // Enlace público de Google Sheets en formato CSV
+    const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTV145AYNCvylHJGYy4YL5NDJnkWSIfpHgwXJjSZO0d4Oa2zLw3--PIQke3LxiXoaUuHrduO-vhEXds/pub?output=csv';
+    const PHONE_NUMBER = '522222051026'; // Pon aquí tu número de WhatsApp
+    const fallbackImg = 'https://via.placeholder.com/300x300?text=Sin+Imagen';
+   
+    let currentProductImages = [];
+    let currentImageIndex = 0;
+    let allProducts = [];
+    let cart = [];
+
+    // Parseador manual para líneas CSV
+    function parseCSVLine(line) {
+      const values = [];
+      let current = '';
+      let inQuotes = false;
+      for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+        if (char === '"') {
+          inQuotes = !inQuotes;
+        } else if (char === ',' && !inQuotes) {
+          values.push(current.trim().replace(/^"|"$/g, ''));
+          current = '';
+        } else {
+          current += char;
+        }
+      }
+      values.push(current.trim().replace(/^"|"$/g, ''));
+      return values;
+    }
+
+   // Convertir el texto CSV completo a objetos JSON (manejando saltos de línea correctamente)
+function parseCSV(text) {
+  const lines = [];
+  let curLine = '';
+  let inQuotes = false;
+
+  // 1. Separar por líneas respetando los textos entre comillas
+  for (let i = 0; i < text.length; i++) {
+    const char = text[i];
+    if (char === '"') {
+      inQuotes = !inQuotes;
+      curLine += char;
+    } else if ((char === '\n' || char === '\r') && !inQuotes) {
+      if (char === '\r' && text[i + 1] === '\n') {
+        i++; // Saltar el caracter \n extra en saltos \r\n
+      }
+      if (curLine.trim().length > 0) {
+        lines.push(curLine);
+      }
+      curLine = '';
+    } else {
+      curLine += char;
+    }
+  }
+  if (curLine.trim().length > 0) {
+    lines.push(curLine);
+  }
+
+  if (lines.length < 2) return [];
+
+  const headers = parseCSVLine(lines[0]).map(h => h.toLowerCase().trim());
+  const products = [];
+
+  // 2. Mapear los datos a objetos JSON
+  for (let i = 1; i < lines.length; i++) {
+    const values = parseCSVLine(lines[i]);
+    let obj = {};
+    headers.forEach((h, index) => {
+      obj[h] = values[index] || '';
+    });
+    obj['descripcion'] = values[5] || ''; 
+      obj['imagen2'] = values[6] || '';
+
+    // 3. RESTRICCIÓN: Solo agregar el producto si la celda "nombre" contiene texto válido
+    if (obj.nombre && obj.nombre.trim() !== '') {
+      products.push(obj);
+    }
+  }
+
+  return products;
+}
+
+   // Convertir enlaces de Google Drive a URLs de imagen directas
+function formatImageUrl(url) {
+  if (!url) return fallbackImg;
+
+  if (url.includes('drive.google.com')) {
+    const idMatch = url.match(/\/d\/([a-zA-Z0-9_-]+)/) || url.match(/id=([a-zA-Z0-9_-]+)/);
+    if (idMatch && idMatch[1]) {
+      return `https://drive.google.com/thumbnail?id=${idMatch[1]}&sz=w1000`;
+    }
+  }
+
+  return url.startsWith('http') ? url : fallbackImg;
+}
+ // Renderizar las tarjetas de productos
+function drawCards(items) {
+  const grid = document.getElementById('productGrid');
+  if (!grid) return;
+
+  if (!Array.isArray(items) || items.length === 0) {
+    grid.innerHTML = '<p class="text-amber-400 text-center col-span-full py-10">No se encontraron productos en el catálogo.</p>';
+    return;
+  }
+
+  let html = '';
+
+  items.forEach((item, index) => {
+    const imgSrc = formatImageUrl(item.imagen);
+    const whatsappMsg = encodeURIComponent(`Hola, me interesa obtener información sobre: ${item.nombre || 'un producto'}`);
+    const waLink =`https://wa.me/${PHONE_NUMBER}?text=${whatsappMsg}`;
+
+    html += `
+          <div class="bg-neutral-900/90 rounded-xl p-4 border border-amber-500/20 flex flex-col justify-between hover:border-amber-500/50 transition-all">
+            <div>
+              <img src="${imgSrc}" alt="${item.nombre || 'Producto'}" 
+                onclick="openModal(${index})"
+                class="w-full h-48 object-cover rounded-lg mb-3 cursor-pointer hover:opacity-90 transition-opacity">
+              <h3 class="text-base font-bold text-white mb-1">${item.nombre || 'Sin nombre'}</h3>
+              <p class="text-amber-200/70 text-xs mb-3 font-medium uppercase tracking-wider">${item.categoria || ''}</p>
+            </div>
+            <div class="flex justify-between items-center mt-2 pt-2 border-t border-neutral-800 gap-1">
+              <span class="text-emerald-400 font-bold text-sm">${item.precio ? '$' + item.precio : ''}</span>
+              <div class="flex gap-1.5">
+                <button onclick="addToCart('${item.nombre}', '${item.precio}', '${imgSrc}')" class="bg-neutral-800 hover:bg-neutral-700 text-amber-400 p-1.5 rounded-lg text-xs transition-colors border border-amber-500/30" title="Agregar al carrito">
+                  <i class="fa-solid fa-cart-plus"></i>
+                </button>
+                <a href="${waLink}" target="_blank" class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-2.5 py-1.5 rounded-lg text-xs transition-colors flex items-center gap-1">
+                  <i class="fa-brands fa-whatsapp text-xs"></i> Pedir
+                </a>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+
+      grid.innerHTML = html;
+    }
+  
+    // Filtrar Productos por buscador
+    function filterProducts() {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = allProducts.filter(item => {
+        const name = (item.nombre || '').toLowerCase();
+        const category = (item.categoria || '').toLowerCase();
+        return name.includes(query) || category.includes(query);
+      });
+      drawCards(filtered);
+    }
+
+    // Cargar Datos desde Google Sheets
+    async function loadProducts() {
+      try {
+        const response = await fetch(SHEET_CSV_URL);
+        if (!response.ok) throw new Error('Error al conectar con la hoja de Google Sheets');
+
+        const csvText = await response.text();
+        allProducts = parseCSV(csvText);
+        drawCards(allProducts);
+      } catch (error) {
+        console.error('Error cargando el catálogo:', error);
+        const grid = document.getElementById('productGrid');
+        if (grid) {
+          grid.innerHTML = '<p class="text-red-400 text-center col-span-full py-10">Error al cargar los productos. Asegúrate de publicar la hoja en la web como CSV.</p>';
+        }
+      }
+    }
+
+    // Iniciar la carga al abrir la página
+    document.addEventListener('DOMContentLoaded', loadProducts);
+   
+   // Funciones del Modal
+function openModal(index) {
+    const item = allProducts[index];
+    if (!item) return;
+    console.log("Producto seleccionado:",item);
+    const modalCartBtn = document.getElementById('modalAddCartBtn');
+
+   const nombre = item.nombre || 'Sin nombre';
+const whatsappMsg = encodeURIComponent('Hola, me interesa obtener información sobre: ' + nombre);
+
+// Cargar imágenes disponibles
+currentProductImages = [];
+if (item.imagen) currentProductImages.push(item.imagen);
+if (item.imagen2) currentProductImages.push(item.imagen2);
+
+currentImageIndex = 0;
+
+const modalImg = document.getElementById('modalImg');
+const prevBtn = document.getElementById('prevImgBtn');
+const nextBtn = document.getElementById('nextImgBtn');
+
+if (currentProductImages.length > 0) {
+    modalImg.src = formatImageUrl(currentProductImages[0]);
+}
+
+if (prevBtn && nextBtn) {
+    if (currentProductImages.length > 1) {
+        prevBtn.classList.remove('hidden');
+        nextBtn.classList.remove('hidden');
+    } else {
+        prevBtn.classList.add('hidden');
+        nextBtn.classList.add('hidden');
+    }
+}
+    document.getElementById('modalTitle').textContent = nombre;
+    document.getElementById('modalCategory').textContent = item.categoria || '';
+    document.getElementById('modalDescription').innerHTML = (item.Descripcion || item.descripcion || 'Sin descripción disponible.').replace(/\n/g, '<br>');
+    document.getElementById('modalPrice').textContent = item.precio ? '$' + item.precio : '';
+    document.getElementById('modalWaLink').href = 'https://wa.me/' + PHONE_NUMBER + '?text=' + whatsappMsg;
+
+    if (modalCartBtn) {
+        modalCartBtn.onclick = function() {
+            addToCart(nombre, item.precio, item.imagen);
+        };
+    }
+
+    const modal = document.getElementById('productModal');
+    if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+}
+
+    function closeModal() {
+      const modal = document.getElementById('productModal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+   function changeImage(direction) {
+    if (currentProductImages.length === 0) return;
+    currentImageIndex = (currentImageIndex + direction + currentProductImages.length) % currentProductImages.length;
+    document.getElementById('modalImg').src = formatImageUrl(currentProductImages[currentImageIndex]);
+}
+
+    // --- LÓGICA DEL CARRITO DE COMPRAS ---
+
+    function addToCart(nombre, precioRaw, imagen) {
+      const precio = parseFloat((precioRaw || '0').replace(/[^0-9.]/g, '')) || 0;
+      const existing = cart.find(p => p.nombre === nombre);
+
+      if (existing) {
+        existing.quantity += 1;
+      } else {
+        cart.push({ nombre, precio, imagen, quantity: 1 });
+      }
+
+      updateCartUI();
+    }
+    function updateCartUI() {
+    const container = document.getElementById('cartItemsContainer');
+    const countEl = document.getElementById('cartCount');
+    const totalEl = document.getElementById('cartTotal');
+    const progressText = document.getElementById('shippingProgressText');
+    const progressBar = document.getElementById('shippingProgressBar');
+      
+    let html = '';
+    let totalItems = 0;
+    let totalPrice = 0;
+    const freeShippingThreshold = 990;
+
+    if (cart.length === 0) {
+        container.innerHTML = '<p class="text-neutral-500 text-center py-8 text-sm">Tu carrito está vacío.</p>';
+        countEl.textContent = '0';
+        totalEl.textContent = '$0';
+        if (progressText && progressBar) {
+            progressText.innerHTML = 'Agrega productos para obtener <b>Envío Gratis</b>';
+            progressBar.style.width = '0%';
+        }
+    } else {
+       cart.forEach((item, index) => {
+        totalItems += item.quantity;
+        totalPrice += item.precio * item.quantity;
+       html += `<div class="flex items-center gap-3 bg-neutral-950 p-2.5 rounded-xl border border-neutral-800/80">
+        <img src="${item.imagen}" class="w-12 h-12 object-cover rounded-lg border border-neutral-800">
+        <div class="flex-1">
+            <h4 class="text-xs font-bold text-white line-clamp-1">${item.nombre}</h4>             <p class="text-emerald-400 text-xs font-semibold">$${item.precio.toLocaleString()}</p>
+        </div>
+        <div class="flex items-center gap-2 bg-neutral-900 px-2 py-1 rounded-lg border border-neutral-800">
+            <button type="button" data-index="${index}" data-action="minus" class="btn-qty text-neutral-400 hover:text-red-400 text-sm px-2 cursor-pointer">-</button>
+            <span class="text-xs text-white font-bold w-4 text-center">${item.quantity}</span>
+            <button type="button" data-index="${index}" data-action="plus" class="btn-qty text-neutral-400 hover:text-amber-400 text-sm px-2 cursor-pointer">+</button>
+        </div>
+    </div>`;
+    });
+      }
+
+    container.innerHTML = html;
+    countEl.textContent = totalItems;
+    totalEl.textContent = '$' + totalPrice.toLocaleString();
+
+    if (progressText && progressBar) {
+      const percentage = Math.min((totalPrice / freeShippingThreshold) * 100, 100);
+      progressBar.style.width = percentage + '%';
+
+      if (totalPrice >= freeShippingThreshold) {
+        progressText.innerHTML = '🎉 <span class="text-emerald-400 font-bold">¡Envío Gratis!</span>';
+        progressBar.className = 'bg-emerald-500 h-2 rounded-full transition-all duration-300';
+      } else {
+        const remaining = freeShippingThreshold - totalPrice;
+        progressText.innerHTML = 'Te faltan <b class="text-amber-400">$' + remaining.toLocaleString() + '</b> para <b>Envío Gratis</b>';
+        progressBar.className = 'bg-amber-400 h-2 rounded-full transition-all duration-300';
+      }
+    }
+  }    
+   
+   // Este código gestiona los clics de los botones de forma global
+document.getElementById('cartItemsContainer').addEventListener('click', (e) => {
+  if (e.target.classList.contains('btn-qty')) {
+    const index = parseInt(e.target.getAttribute('data-index'));
+    const action = e.target.getAttribute('data-action');
+    
+    // Llamamos a tu función updateQuantity existente
+    if (action === 'minus') {
+        updateQuantity(index, -1);
+    } else if (action === 'plus') {
+        updateQuantity(index, 1);
+    }
+  }
+});
+   function updateQuantity(index, change) {
+    // Busca el producto en el carrito por su índice
+    if (cart[index]) {
+        cart[index].quantity += change;
+        // Si la cantidad llega a 0 o menos, elimina el producto del carrito
+        if (cart[index].quantity <= 0) {
+            cart.splice(index, 1);
+        }
+    }
+    // Actualiza la interfaz para reflejar los cambios
+    updateCartUI();
+}
+
+    function toggleCartDrawer() {
+      const drawer = document.getElementById('cartDrawer');
+      drawer.classList.toggle('translate-x-full');
+    }
+
+    function sendCartToWhatsApp() {
+    if (cart.length === 0) {
+        alert('Tu carrito está vacío.');
+        return;
+    }
+
+    let message = "¡Hola! Me gustaría realizar un pedido con los siguientes productos:\n\n";
+    let total = 0;
+
+    cart.forEach(function(item) {
+        const subtotal = item.precio * item.quantity;
+        total += subtotal;
+        message += "* " + item.quantity + "x " + item.nombre + " - $" + subtotal + "\n";
+    });
+
+    message += "\nTotal a pagar: $" + total;
+
+    const url = "https://wa.me/" + PHONE_NUMBER + "?text=" + encodeURIComponent(message);
+    window.open(url, '_blank');
+}
+  </script>
+</body>
+</html>
