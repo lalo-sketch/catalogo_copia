@@ -92,12 +92,12 @@
   <!-- BOTÓN FLOTANTE Y TARJETA DE UBICACIÓN -->
 <div class="fixed bottom-24 right-6 z-40 flex flex-col items-end">
   
-  <!-- Tarjeta desplegable de Ubicación -->
-  <div id="locationCard" class="hidden mb-3 w-72 bg-neutral-900/95 border border-red-500/30 rounded-2xl p-4 shadow-2xl backdrop-blur-md transition-all duration-300">
-    <h4 class="text-red-500 font-bold text-sm mb-2 text-center">UB Shop Tienda Física</h4>
+  <!-- Tarjeta desplegable (Mantiene el estilo dorado original) -->
+  <div id="locationCard" class="hidden mb-3 w-72 bg-neutral-900/95 border border-amber-500/30 rounded-2xl p-4 shadow-2xl backdrop-blur-md transition-all duration-300">
+    <h4 class="text-amber-400 font-bold text-sm mb-2 text-center">UB Shop Tienda Física</h4>
     
     <div class="flex items-start gap-2 mb-3">
-      <span class="text-red-500 text-base mt-0.5">📍</span>
+      <span class="text-amber-400 text-base mt-0.5">📍</span>
       <p class="text-neutral-300 text-xs leading-relaxed">
         Av. 25ote #209-1 el Carmen, CP 72530, Puebla, Pue., México.
       </p>
@@ -112,6 +112,13 @@
     
     <p class="text-[10px] text-neutral-400 text-center mt-2">Guía directa en Maps</p>
   </div>
+
+  <!-- Botón flotante SOLO con el pin en rojo -->
+  <button onclick="toggleLocationCard()" class="bg-neutral-800/90 border border-neutral-700 p-3 rounded-full shadow-lg hover:scale-105 transition-transform flex items-center justify-center">
+    <i class="fa-solid fa-location-dot text-lg text-red-500"></i>
+  </button>
+
+</div>
 
   <!-- Botón flotante Pin en Rojo -->
   <button onclick="toggleLocationCard()" class="bg-neutral-800/90 border border-red-500/40 text-red-500 hover:text-red-400 p-3 rounded-full shadow-lg hover:scale-105 transition-transform flex items-center justify-center">
