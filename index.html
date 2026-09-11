@@ -89,6 +89,36 @@
       </div>
     </div>
   </div>
+  <!-- BOTÓN FLOTANTE Y TARJETA DE UBICACIÓN -->
+<div class="fixed bottom-24 right-6 z-40 flex flex-col items-end">
+  
+  <!-- Tarjeta desplegable de Ubicación (oculta por defecto) -->
+  <div id="locationCard" class="hidden mb-3 w-72 bg-neutral-900/95 border border-amber-500/30 rounded-2xl p-4 shadow-2xl backdrop-blur-md transition-all duration-300">
+    <h4 class="text-amber-400 font-bold text-sm mb-2 text-center">UB Shop Tienda Física</h4>
+    
+    <div class="flex items-start gap-2 mb-3">
+      <span class="text-amber-400 text-base mt-0.5">📍</span>
+      <p class="text-neutral-300 text-xs leading-relaxed">
+        Av. 25ote #209-1 el Carmen, CP 72530, Puebla, Pue., México.
+      </p>
+    </div>
+
+    <a href="https://www.google.com/maps/search/?api=1&query=Av.+25ote+%23209-1+el+Carmen,+72530+Heroica+Puebla+de+Zaragoza" 
+       target="_blank" 
+       rel="noopener noreferrer" 
+       class="w-full bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold py-2 px-3 rounded-xl flex items-center justify-center gap-2 shadow-md transition-colors">
+      Ver en Google Maps 📍
+    </a>
+    
+    <p class="text-[10px] text-neutral-400 text-center mt-2">Guía directa en Maps</p>
+  </div>
+
+  <!-- Botón flotante Pin -->
+  <button onclick="toggleLocationCard()" class="bg-neutral-800/90 border border-amber-500/40 text-amber-400 hover:text-amber-300 p-3 rounded-full shadow-lg hover:scale-105 transition-transform flex items-center justify-center">
+    <i class="fa-solid fa-location-dot text-lg"></i>
+  </button>
+
+</div>
   <!-- BOTÓN FLOTANTE DEL CARRITO -->
   <button onclick="toggleCartDrawer()" class="fixed bottom-6 right-6 bg-amber-500 hover:bg-amber-400 text-black p-4 rounded-full shadow-2xl z-40 flex items-center justify-center transition-transform hover:scale-110">
     <i class="fa-solid fa-cart-shopping text-xl"></i>
@@ -129,8 +159,14 @@
       </button>
     </div>
   </div>
+  
 
  <script>
+     // Función para mostrar/ocultar la tarjeta de ubicación
+    function toggleLocationCard() {
+    const card = document.getElementById('locationCard');
+     card.classList.toggle('hidden');
+      }
     // Enlace público de Google Sheets en formato CSV
     const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTV145AYNCvylHJGYy4YL5NDJnkWSIfpHgwXJjSZO0d4Oa2zLw3--PIQke3LxiXoaUuHrduO-vhEXds/pub?output=csv';
     const PHONE_NUMBER = '522222051026'; // Pon aquí tu número de WhatsApp
